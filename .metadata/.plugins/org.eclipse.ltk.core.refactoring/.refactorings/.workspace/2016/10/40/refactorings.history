@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;GestionCabinet&apos; to &apos;gestioncabinet&apos;" description="Rename resource &apos;GestionCabinet&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/GestionCabinet" name="gestioncabinet" stamp="1475843878803" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;gestioncabinet&apos; to &apos;GestionCabinet&apos;" description="Rename resource &apos;gestioncabinet&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/gestioncabinet" name="GestionCabinet" stamp="1475852205995" updateReferences="true"/>
-</session>
