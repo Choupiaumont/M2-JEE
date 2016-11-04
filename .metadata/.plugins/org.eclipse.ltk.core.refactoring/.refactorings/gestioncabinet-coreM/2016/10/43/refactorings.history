@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;miage.gestioncabinet.coreM&apos; to &apos;gestioncabinet-coreDB/ejbModule&apos;&#x0A;- Original project: &apos;gestioncabinet-coreM&apos;&#x0A;- Destination element: &apos;gestioncabinet-coreDB/ejbModule&apos;&#x0A;- Original element: &apos;gestioncabinet-coreM/ejbModule/miage.gestioncabinet.coreM&apos;" description="Copy package" destination="=gestioncabinet-coreDB/ejbModule" element1="/ejbModule&lt;miage.gestioncabinet.coreM" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1477655695539" version="1.0"/>
+</session>

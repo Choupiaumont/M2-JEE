@@ -1,0 +1,104 @@
+package miage.gestioncabinet.coreDB;
+
+import miage.gestioncabinet.api.Produit;
+import miage.gestioncabinet.api.Traitement;
+
+/**
+ * Décrit un traitement prescrit et stocké en mémoire
+ * @author sraybaud
+ *
+ */
+public class TraitementImp implements Traitement{
+
+	/**
+	 * serialVersionUID de la classe
+	 */
+	private static final long serialVersionUID = -6675736174210846249L;
+
+	/**
+	 * Posologie du traitement
+	 */
+	private String posologie;
+	
+	/**
+	 * Produit prescrit
+	 */
+	private Produit produit;
+	
+	/**
+	 * Retourne le produit prescrit
+	 * @return la spécialité médicamenteuse
+	 */
+	@Override
+	public Produit getProduit() {
+		return produit;
+	}
+
+	/**
+	 * Modifie le produit prescrire
+	 * @param produit le produit à modifier
+	 */
+	@Override
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+
+	/**
+	 * Retourne la posologie
+	 * @return la posologie
+	 */
+	@Override
+	public String getPosologie() {
+		return posologie;
+	}
+
+	/**
+	 * Modifie la posologie de la prescription
+	 * @param posologie la posologie à modifier
+	 */
+	@Override
+	public void setPosologie(String posologie) {
+		this.posologie = posologie;
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((produit == null) ? 0 : produit.hashCode());
+		return result;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof TraitementImp))
+			return false;
+		TraitementImp other = (TraitementImp) obj;
+		if (produit == null) {
+			if (other.produit != null)
+				return false;
+		} else if (!produit.equals(other.produit))
+			return false;
+		return true;
+	}
+
+	/**
+	 * Représentation textuel d'un traitement
+	 * @return le texte correspondant
+	 */
+	@Override
+	public String toString(){
+		return this.getClass().getSimpleName()+" "+this.produit;
+	}
+
+}

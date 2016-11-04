@@ -1,0 +1,154 @@
+package miage.gestioncabinet.coreDB;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import miage.gestioncabinet.api.Consultation;
+import miage.gestioncabinet.api.Interaction;
+import miage.gestioncabinet.api.Produit;
+
+/**
+ * Entité non persistante décrivant une interaction médicamenteuse
+ * @author sraybaud
+ *
+ */
+@Entity
+@Table(name="t_interaction")
+@SequenceGenerator(name="sequence_interaction",sequenceName="interaction_id_seq", allocationSize=1)
+public class InteractionDB implements Interaction{
+	
+	/**
+	 * serialVersionUID de la classe
+	 */
+	private static final long serialVersionUID = 1112208032256186057L;
+	
+	@Id
+	@Column(name="c_idinteraction")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="sequence_interaction")
+	private Long id;
+	/**
+	 * Sévérité de l'interaction
+	 */
+	@Column(name="c_severite")
+	private String severite;
+	
+	/**
+	 * Risques associés
+	 */
+	@Column(name="c_risques")
+	private String risques;
+	
+	/**
+	 * Précuations à prendre
+	 */
+	@Column(name="c_precautions")
+	private String precautions;
+	
+	@Column(name="c_produita_nom")
+	private String nomProduitA;
+	
+	@Column(name="c_produita_cis")
+	private String cisProduitA;
+	
+	@Column(name="c_produitb_nom")
+	private String nomProduitB;
+	
+	@Column(name="c_produitb_cis")
+	private String cisProduitB;
+	
+	@ManyToOne(targetEntity=ConsultationDB.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="c_fidconsultation")
+	private Consultation consultation;
+
+	/**
+	 * Retourne la sévérité de l'interaction
+	 * @return la sévérité correspondante
+	 */
+	@Override
+	public String getSeverite() {
+		return severite;
+	}
+
+	/**
+	 * Modifie la sévérité de l'interaction
+	 * @param severite la sévérité à modifier
+	 */
+	@Override
+	public void setSeverite(String severite) {
+		this.severite = severite;
+	}
+
+	/**
+	 * Retourne les risques liés de l'interaction
+	 * @return les risques correspondants
+	 */
+	@Override
+	public String getRisques() {
+		return risques;
+	}
+
+	/**
+	 * Modifie les risques liés à l'interaction
+	 * @param risques les risques à modifier
+	 */
+	@Override
+	public void setRisques(String risques) {
+		this.risques = risques;
+	}
+
+	/**
+	 * Retourne les précautions à prendre vis à vis de l'interaction
+	 * @return les précautions correspondantes
+	 */
+	@Override
+	public String getPrecautions() {
+		return precautions;
+	}
+
+	/**
+	 * Modifie les précautions à prendre vis à vis de l'interaction
+	 * @return precautions les précautions à modifier
+	 */
+	@Override
+	public void setPrecautions(String precautions) {
+		this.precautions = precautions;
+	}
+
+	@Override
+	public Produit getProduitA() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProduitA(Produit produit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Produit getProduitB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProduitB(Produit produit) {
+		// TODO Auto-generated method stub
+		
+	}	
+	
+	
+	
+	
+
+}
