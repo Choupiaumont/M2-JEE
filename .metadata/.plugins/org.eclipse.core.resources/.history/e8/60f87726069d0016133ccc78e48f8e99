@@ -1,0 +1,163 @@
+/**
+ * 
+ */
+package miage.gestioncabinet.coreDB;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.LocalBean;
+import javax.ejb.Singleton;
+
+import miage.gestioncabinet.api.Consultation;
+import miage.gestioncabinet.api.GestionCabinetException;
+import miage.gestioncabinet.api.Medecin;
+import miage.gestioncabinet.api.Patient;
+
+/**
+ * Simule en mémoire une persistance des objets
+ * @author sraybaud
+ *
+ */
+@Singleton
+@LocalBean
+public class DataMService {
+	
+	/**
+	 * La liste des médecins du cabinet
+	 */
+	private Map<Long, Medecin> medecins;
+	
+	/**
+	 * La liste des consultations enregistrées
+	 */
+	private  Map<Long,Consultation> consultations;
+	
+	/**
+	 * La liste des patients enregistrés
+	 */
+	private  Map<Long,Patient> patients;
+	
+	/**
+	 * Initialisation du service
+	 */
+	@PostConstruct
+	private void init(){
+		// Initialisation d'un jeu de tests de médecins
+		if(medecins==null){
+			medecins = new Hashtable<Long, Medecin>();
+			String[] noms = {"Ross", "Benton", "Greene", "Hathaway"};
+			String[] prenoms = {"Douglas", "Peter", "Mark", "Carol"};
+			for(int i=0; i< noms.length; i++){
+				Medecin medecin = new MedecinImp();
+				medecin.setNom(noms[i]);
+				medecin.setPrenom(prenoms[i]);
+				medecins.put(medecin.getId(), medecin);	
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {}
+			}
+			
+		}
+		if(consultations==null){
+			consultations = new Hashtable<Long,Consultation>();
+		}
+		if(patients==null){
+			patients = new Hashtable<Long,Patient>();
+		}
+	}
+	
+	/**
+	 * Retourne la liste des médecins
+	 */
+	public List<Medecin> getMedecins(){
+		return new ArrayList<Medecin>(medecins.values());
+	}
+	
+	/**
+	 * Retourne la liste des patients enregistrées
+	 * 
+	 */
+	public List<Patient> getPatients(){
+		return new ArrayList<Patient>(patients.values());
+	}
+	
+	/**
+	 * Retourne le patient correspondant à l'id fourni en argument
+	 */
+	public Patient getPatient(Long id){
+		return this.patients.get(id);
+	}
+	
+	/**
+	 * Enregistre le patient fourni en argument
+	 * @param patient le patient à enregistrer
+	 */
+	public void savePatient(Patient patient) throws GestionCabinetException{
+		try{
+			this.patients.put(patient.getId(), patient);
+		}catch(NullPointerException e){
+			throw new GestionCabinetException("Impossible de sauvegarder le "+patient,e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param patient
+	 */
+	public void removePatient(Patient patient) throws GestionCabinetException{
+		try{
+			this.patients.remove(patient.getId());
+		}
+		catch(NullPointerException e){
+			throw new GestionCabinetException("Impossible de supprimer le "+patient,e);
+		}
+	}
+	
+	/**
+	 * Retourne la liste des consultations enregistrées
+	 * 
+	 */
+	public List<Consultation> getConsultations(){
+		return new ArrayList<Consultation>(consultations.values());
+	}
+	
+	/**
+	 * Retourne le patient correspondant à l'id fourni en argument
+	 */
+	public Consultation getConsultation(Long id){
+		return this.consultations.get(id);
+	}
+	
+
+	
+	/**
+	 * Enregistre le patient fourni en argument
+	 * @param patient le patient à enregistrer
+	 */
+	public Consultation saveConsultation(Consultation c) throws GestionCabinetException{
+		try{
+			this.consultations.put(((ConsultationImp) c).getId(), c);
+			this.patients.put(c.getPatient().getId(), c.getPatient());
+			return c;
+		}catch(NullPointerException e){
+			throw new GestionCabinetException("Impossible de sauvegarder la "+c,e);
+		}
+	}
+	
+	public void removeConsultation(Consultation c) throws GestionCabinetException{
+		try{
+			this.consultations.remove(((ConsultationImp) c).getId());
+		}
+		catch(NullPointerException e){
+			throw new GestionCabinetException("Impossible de supprimer la "+c,e);
+		}
+	}
+	
+	
+
+
+}

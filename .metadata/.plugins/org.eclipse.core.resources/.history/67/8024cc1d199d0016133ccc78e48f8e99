@@ -1,0 +1,123 @@
+/**
+ * 
+ */
+package miage.gestioncabinet.coreDB;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
+import javax.interceptor.Interceptors;
+
+import miage.gestioncabinet.api.Consultation;
+import miage.gestioncabinet.api.ConsultationRemoteService;
+import miage.gestioncabinet.api.GestionCabinetException;
+import miage.gestioncabinet.api.PrescriptionLocalService;
+import miage.gestioncabinet.api.Produit;
+import miage.gestioncabinet.api.Traitement;
+
+/**
+ * @author nicolascapiaumont
+ * 
+ */
+@Stateful
+@Interceptors(EJBInterceptor.class)
+@Remote(ConsultationRemoteService.class)
+public class ConsultationDBService implements ConsultationRemoteService {
+
+	@Inject
+	private DataMService dataMService;
+	
+	@Inject
+	private PrescriptionLocalService prescriptionLocalService;
+	
+	private Consultation consultation;
+
+	@PostConstruct
+	public void init() {
+		this.prescriptionLocalService.setClasseProduit(ProduitDB.class);
+		this.prescriptionLocalService.setClasseInteraction(InteractionDB.class);
+	}
+	
+	/**
+	 * Retourne le rendez-vous de consultation courant
+	 * 
+	 * @return le consultation correspondante
+	 */
+	@Override
+	public Consultation getConsultation() {
+		return this.consultation;
+	}
+
+	/**
+	 * Modifie la consultation courante
+	 * 
+	 * @param consultation la consultation courante
+	 */
+	@Override
+	public void setConsultation(Consultation consultation) {
+		this.consultation = consultation;
+	}
+
+	/**
+	 * Recherche la liste des produits correspondant au mot-clé fourni en
+	 * argument
+	 * 
+	 * @param keyword le mot-clé saisi
+	 * @return la liste des produits correspondants
+	 */
+	@Override
+	public List<Produit> rechercherMedicament(String keyword)
+			throws GestionCabinetException {
+		List<Produit> listProduits = new ArrayList<Produit>();
+		try {
+			listProduits = this.prescriptionLocalService.findProductsByKeyword(keyword);
+		} catch (Exception e) {
+			throw new GestionCabinetException(e.getMessage());
+		}
+		return listProduits;
+	}
+
+	/**
+	 * Procède à l'analyse des interactions médicamenteuseses de la prescription
+	 * de la consultation courante
+	 */
+	@Override
+	public void analyserPrescription() throws GestionCabinetException {
+		if (this.consultation == null) throw new GestionCabinetException("Aucune consultation courante");
+		List<Produit> listProduits = new ArrayList<Produit>();
+		List<Traitement> listPrescriptions = this.consultation.getPrescription();
+		for (Traitement traitement : listPrescriptions) {
+			listProduits.add(traitement.getProduit());
+		}
+		this.prescriptionLocalService.analyseInteractions(listProduits);
+	}
+
+	/**
+	 * Sauvegarde la consultation courante
+	 * 
+	 * @return la consultation après avoir été sauvegardée
+	 */
+	@Override
+	public Consultation enregistrer() throws GestionCabinetException {
+		if (this.consultation == null)
+			throw new GestionCabinetException("Aucune consultation en cours");
+		this.dataMService.saveConsultation(this.consultation);
+		return this.consultation;
+	}
+
+	/**
+	 * Supprime la consultation courante
+	 */
+	@Override
+	public void supprimer() throws GestionCabinetException {
+		if (this.consultation == null)
+			throw new GestionCabinetException("Aucune consultation en cours");
+		this.dataMService.removeConsultation(this.consultation);
+		this.consultation = null;
+	}
+
+}

@@ -1,0 +1,34 @@
+package miage.gestioncabinet.coreM;
+
+import miage.gestioncabinet.api.Medecin;
+
+/**
+ * CLasse qui décrit le medecin
+ * @author marjolaine
+ *
+ */
+public class MedecinImp extends UtilisateurImp implements Medecin{
+
+	/**
+	 * serialVersionUID de la classe
+	 */
+	private static final long serialVersionUID = 1687580056299643570L;
+	private String rpss;
+	
+	/**
+	 * Contructeur du Medecin
+	 */
+	public MedecinImp(){
+		super();
+	}
+	
+	/**
+	 * récupère le rpss du medecin
+	 * @return la rpss du medecin
+	 */
+	@Override
+	public String getRPPS() {
+		return rpss;
+	}
+
+}
